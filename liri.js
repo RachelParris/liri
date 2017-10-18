@@ -40,34 +40,36 @@ twitterKey.get('statuses/user_timeline', params, function(error, tweets, respons
 
 
 // SPOTIFY
-/* Receving error: No token received */
-var spotify = new Spotify({
+	var spotify = new Spotify({
   id: '839aaaeac2704e399b8f5ea6bd416365',
   secret: 'be1bdc26af1a47d9ba97a59b8535643a'
 });
 
-
-/* This will show the following information about the song in your terminal/bash window
-Artist(s)
-The song's name
-A preview link of the song from Spotify
-The album that the song is from
-If no song is provided then your program will default to "The Sign" by Ace of Base. */
-
 // Command: node liri.js spotify-this-song '<song name here>'
 // Sends Spotify API request
 function findSongs() {
-	spotify.search({type: 'track', query: secondaryInput})
-		.then(function(response) {
-	    console.log(response);
-	  })
-	  .catch(function(err) {
-	    console.log(err);
-	  });
+	if (secondaryInput === undefined) {
+		// If no song is provided then your program will default to "The Sign" by Ace of Base.
+		var query = "The+Sign";
+	} else {
+		var query = secondaryInput;
+	}
+
+	spotify.search({type: 'track', query: query}, function(err, data) {
+	if (err) {
+		return console.log('Error occurred: ' + err);
+	}
+
+ 	var music = data.tracks.items[0];
+ 	console.log("Artist(s): ", music.album.artists[0].name);
+  console.log("Song title: \"" + music.name + "\"");
+  console.log("Album name: ", music.album.name);
+	console.log("Preview link: ", music.preview_url);
+	});
 }
 
 
-//OMDB
+//OMDb API
 // Command: node liri.js movie-this '<movie name here>'
 // Sends OMDB API request
 function findMovie() {
@@ -116,8 +118,10 @@ function findText(fn) {
 		findSongs();
 	} else if (input === "movie-this") {
 		findMovie();
-	} else {
+	} else if (input === "do-what-it-says") {
 		findText(commands);
+	} else {
+		console.log("Please enter a valid command.");
 	}
 })();
 
