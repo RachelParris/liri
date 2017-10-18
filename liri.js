@@ -25,16 +25,16 @@ function findTweets() {
 	count: 20
 }
 
-twitterKey.get('statuses/user_timeline', params, function(error, tweets, response) {
-		 if (!error) {
-		 	for ( var i = 0; i < 20; i++) {
-		 	console.log("Created on: ", tweets[i].created_at);
-    	console.log(params.screen_name + " tweeted: " + tweets[i].text);
-    	console.log(" ");
-		 	}
-  	} else {
-  		console.log(error);
-  	}
+	twitterKey.get('statuses/user_timeline', params, function(error, tweets, response) {
+		if (!error) {
+			for ( var i = 0; i < 20; i++) {
+				console.log("Created on: ", tweets[i].created_at);
+				console.log(params.screen_name + " tweeted: " + tweets[i].text);
+				console.log(" ");
+			}
+		} else {
+			console.log(error);
+		}
 	});
 }
 
@@ -48,12 +48,8 @@ twitterKey.get('statuses/user_timeline', params, function(error, tweets, respons
 // Command: node liri.js spotify-this-song '<song name here>'
 // Sends Spotify API request
 function findSongs() {
-	if (secondaryInput === undefined) {
-		// If no song is provided then your program will default to "The Sign" by Ace of Base.
-		var query = "The+Sign";
-	} else {
-		var query = secondaryInput;
-	}
+	// If no song is provided then your program will default to "The Sign" by Ace of Base.
+	var query = (secondaryInput === undefined) ? "The+Sign" : secondaryInput;
 
 	spotify.search({type: 'track', query: query}, function(err, data) {
 	if (err) {
@@ -73,12 +69,9 @@ function findSongs() {
 // Command: node liri.js movie-this '<movie name here>'
 // Sends OMDB API request
 function findMovie() {
-	if (secondaryInput === undefined) {
-		var url = "http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=40e9cece";
-	} else {
-		var url = "http://www.omdbapi.com/?t=" + secondaryInput + "&y=&plot=short&apikey=40e9cece";
-	}
-	
+	var url = (secondaryInput === undefined) ? ("http://www.omdbapi.com/?t=mr+nobody&y=&plot=short&apikey=40e9cece") 
+	: ("http://www.omdbapi.com/?t=" + secondaryInput + "&y=&plot=short&apikey=40e9cece");
+
 	request(url, function(error, response, body) {
 		var json = JSON.parse(body);
 
@@ -112,16 +105,21 @@ function findText(fn) {
 
 // Commands
 (function commands () {
-	if (input === "my-tweets") {
-		findTweets();
-	} else if (input === "spotify-this-song") {
-		findSongs();
-	} else if (input === "movie-this") {
-		findMovie();
-	} else if (input === "do-what-it-says") {
-		findText(commands);
-	} else {
-		console.log("Please enter a valid command.");
+	switch (input) {
+		case "my-tweets":
+			findTweets();
+			break;
+		case "spotify-this-song":
+			findSongs();
+			break;
+		case "movie-this":
+			findMovie();
+			break;
+		case "do-what-it-says":
+			findText(commands);
+			break;
+		default:
+			console.log("Please enter a valid command.");
 	}
 })();
 
