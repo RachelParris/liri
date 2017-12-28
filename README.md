@@ -5,7 +5,7 @@
 LIRI is a command line node app that takes in parameters and gives you back data for Spotify, Twitter, and the OMDB API.
 You can enter the following commands into the command line:
 
-```javascript
+```
 node liri.js my-tweets
 Shows the last 20 tweets and when they were created in the terminal.
 
