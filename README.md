@@ -1,7 +1,5 @@
 # LIRI
 
-# TriviaGame-Advanced
-
 LIRI is a command line node app that takes in parameters and gives you back data for Spotify, Twitter, and the OMDB API.
 You can enter the following commands into the command line:
 
